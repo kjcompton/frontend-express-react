@@ -16,6 +16,7 @@ const Main = (props) => {
     }
 
     const createPerson = async (person) => {
+        console.log(person + "on line 19")
         await fetch(URL, {
             method: "POST",
             headers: {
@@ -23,10 +24,31 @@ const Main = (props) => {
             },
             body: JSON.stringify(person)
         })
+        console.log(person + "on line 27")
         //Update List of peoiple in state
         getPeople()
     }
 
+    const updatePeople = async (person, id) => {
+        //make put request to create people
+        await fetch(URL + id, {
+            method: 'PUT',
+            headers: {
+                "Content-Type": "application/json",
+
+            },
+            body: JSON.stringify(person)
+        })
+        getPeople()
+    }
+
+    const deletePeople = async (id) => {
+        // make post request to create people
+        await fetch(URL + id, {
+            method: "DELETE"
+        })
+        getPeople()
+    }
     useEffect(() => {
         getPeople()
     }, [])
@@ -35,7 +57,7 @@ const Main = (props) => {
         <main>
             <Routes>
                 <Route path='/' element={ <Index people={people} createPerson={createPerson} /> } />
-                <Route path='/people/:id' element={ <Show /> } />
+                <Route path='/people/:id' element={ <Show people={people} updatePeople={updatePeople} deletePeople={deletePeople}/> } />
             </Routes>
         </main>
     )
